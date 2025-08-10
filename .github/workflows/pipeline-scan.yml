@@ -23,4 +23,4 @@ jobs:
           aws-region: us-west-2
           role-to-assume: arn:aws:iam::105014798395:role/warden-production
       - name: Verify identity
-        run: aws sts get-caller-identity
+        run: aws s3 ls guardicore-public
