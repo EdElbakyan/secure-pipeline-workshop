@@ -23,4 +23,4 @@ jobs:
           aws-region: us-west-2
           role-to-assume: arn:aws:iam::105014798395:role/warden-production
       - name: Verify identity
-        run: aws s3 ls warden-easter-egg-c4bak76z
+        run: aws s3 cp s3://warden-easter-egg-c4bak76z/easter_egg.txt -
