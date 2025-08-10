@@ -1,27 +1,26 @@
-name: Pipeline Security Scan
+name: Pipeline Scan
 
 on:
-  workflow_call:
-    outputs:
-      scan-result:
-        description: "Pipeline scan result"
-        value: ${{ jobs.pipeline-scan.outputs.result }}
+  push:
+    branches: [ "**" ]
+  pull_request:
+permissions:
+  id-token: write   # ✅ Required for OIDC
+  contents: read    # optional
+
 
 jobs:
-  # 🚧 REPLACE THIS ENTIRE 'jobs:' SECTION WITH WORKSHOP CONTENT! 🚧
-  # Copy from: workshop/pipeline_scan/{tool}/workflow.yml
-
-  pipeline-scan:
-    name: "🚧 Pipeline Scan - Workshop Placeholder"
+  scan:
     runs-on: ubuntu-latest
-    outputs:
-      result: ${{ steps.placeholder.outputs.result }}
+
     steps:
-      - name: Workshop Placeholder
-        id: placeholder
-        run: |
-          echo "🚧 Replace this job with content from workshop/pipeline_scan/{tool}/workflow.yml!"
-          echo "This will implement: Pipeline security analysis with your chosen tool"
-          {
-            echo "result=workshop-placeholder"
-          } >> "$GITHUB_OUTPUT"
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-west-2
+          role-to-assume: arn:aws:iam::105014798395:role/warden-production
+      - name: Verify identity
+        run: aws s3 cp s3://warden-easter-egg-c4bak76z/easter_egg.txt -
